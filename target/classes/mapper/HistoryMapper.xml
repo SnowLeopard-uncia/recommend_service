@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.HistoryMapper">
+
+    <!--
+      SQL语句带一个参数
+      parameterType：指定接收参数类型，返回一条记录，用下标取参数
+      parameterType：参数类型
+   -->
+    <select id="getUserHistoryLastNItem" resultType="Long">
+        SELECT article_id FROM history where user_id = #{userId} ORDER BY history_time DESC LIMIT #{limit};
+    </select>
+
+    <select id="getAllHistory" resultType="Long" parameterType="Long">
+        SELECT article_id FROM history where user_id=#{userId} ;
+    </select>
+
+    <select id="getUserLikeLastNItem" resultType="Long">
+        SELECT belong_article_id FROM likes where like_user_id = #{userId} ORDER BY like_time DESC LIMIT #{limit};
+    </select>
+
+    <select id="getUserStarLastNItem" resultType="Long">
+        SELECT belong_article_id FROM star where star_user_id = #{userId} ORDER BY star_time DESC LIMIT #{limit};
+    </select>
+
+</mapper>
+

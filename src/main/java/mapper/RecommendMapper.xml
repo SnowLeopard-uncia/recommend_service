@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.RecommendMapper">
+
+    <resultMap id="HotRecommendMap" type="pojo.HotRecommend">
+        <!--主键-->
+        <id property="id" column="id"/>
+        <result property="tag" column="tag"/>
+        <result property="articleId" column="article_id"/>
+        <result property="hotValue" column="hot_value"/>
+        <result property="createTime" column="create_time"/>
+        <result property="isPost" column="is_post"/>
+    </resultMap>
+    <resultMap id="UserRecommendMap" type="pojo.UserRecommend">
+        <!--主键-->
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="articleId" column="article_id"/>
+        <result property="recommendValue" column="recommend_value"/>
+        <result property="createTime" column="create_time"/>
+        <result property="isPost" column="is_post"/>
+    </resultMap>
+
+    <!--分页获取所有热门文章-->
+    <select id="getHotRecommendList"  resultMap="HotRecommendMap">
+        select
+        *
+        from hot_recommend where tag = #{tag}
+        order by create_time desc,hot_value desc
+        <if test="start!=null and limit!=null">
+            limit #{start},#{limit}
+        </if>
+    </select>
+
+    <select id="getTotalHotRecommend" parameterType="Map" resultType="int">
+        select count(*) from hot_recommend
+    </select>
+
+    <!--分页获取用户个性化推荐文章-->
+    <select id="getPersonalRecommendList"  resultMap="UserRecommendMap">
+        select
+        *
+        from user_recommend where user_id = #{userId} AND is_post=false
+        order by create_time desc,recommend_value desc
+        <if test="start!=null and limit!=null">
+            limit #{start},#{limit}
+        </if>
+    </select>
+    <select id="getTotalPersonalRecommend" parameterType="Map" resultType="int">
+        select count(*) from user_recommend
+    </select>
+
+
+<!--    推荐出去的设is_post为true 批量更新-->
+    <update id="updatePersonalRecommend" >
+        <foreach collection="list" item="id" separator=";">
+            update user_recommend set is_post=1 where article_id=#{id}
+        </foreach>
+    </update>
+
+    <!--    推荐出去的设is_post为true 批量更新-->
+    <update id="updateHotRecommend" >
+        <foreach collection="list" item="id" separator=";">
+            update hot_recommend set is_post=1 where article_id=#{id}
+        </foreach>
+    </update>
+
+
+<!--    写入个性化推荐列表-->
+    <insert id="insertPersonalArticle" parameterType="java.util.List">
+        INSERT INTO user_recommend (user_id, article_id,recommend_value)
+        VALUES
+        <foreach collection="list" item="recommend" separator=",">
+            (#{recommend.userId}, #{recommend.articleId},#{recommend.recommendValue})
+        </foreach>
+    </insert>
+
+    <!--    写入热度推荐列表-->
+    <insert id="insertHotArticle" parameterType="java.util.List">
+        INSERT INTO hot_recommend (tag, article_id,hot_value)
+        VALUES
+        <foreach collection="list" item="recommend" separator=",">
+            (#{recommend.tag}, #{recommend.articleId},#{recommend.hotValue})
+        </foreach>
+    </insert>
+
+
+
+</mapper>
+

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.ArticleMapper">
+
+    <resultMap id="ArticleMap" type="pojo.Article">
+        <!--主键-->
+        <id property="articleId" column="article_id"/>
+        <result property="classify" column="Classify"/>
+        <result property="title" column="Title"/>
+        <result property="author" column="Author"/>
+        <result property="pubTime" column="PubTime"/>
+        <result property="keyword" column="Keyword"/>
+        <result property="summary" column="Summary"/>
+        <result property="link" column="Link"/>
+        <result property="status" column="status"/>
+        <result property="views" column="views"/>
+        <result property="likes" column="likes"/>
+        <result property="stars" column="stars"/>
+    </resultMap>
+
+    <select id="getArticleLastNItemByTag" resultType="pojo.Article">
+        SELECT * FROM article where Classify=#{tag} ORDER BY PubTime DESC LIMIT #{count};
+    </select>
+
+    <select id="getArticleById" resultType="pojo.Article">
+        SELECT * FROM article where article_id = #{article_id};
+    </select>
+
+    <select id="getAllArticle" resultType="pojo.Article">
+        SELECT * FROM article ;
+    </select>
+
+    <select id="selectTagRandom" resultType="pojo.Article">
+        SELECT * FROM article
+        WHERE Classify = #{tag}
+        ORDER BY RAND()
+        LIMIT #{n}
+    </select>
+
+    <select id="selectRandom" resultType="pojo.Article">
+        SELECT * FROM article
+        ORDER BY RAND()
+        LIMIT #{n}
+    </select>
+
+    <!--    根据Article_id批量返回Article对象-->
+<!--    <select id="selectByArticleIds" resultType="pojo.Article">-->
+<!--        SELECT * FROM article WHERE article_id IN-->
+<!--        <foreach item="item" index="index" collection="ids"-->
+<!--                 open="(" separator="," close=")">-->
+<!--            #{item}-->
+<!--        </foreach>-->
+<!--    </select>-->
+    <select id="selectByArticleIds" resultType="pojo.Article">
+        SELECT * FROM article
+        <foreach item="item" collection="ids" open="where article_id in(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+</mapper>
+

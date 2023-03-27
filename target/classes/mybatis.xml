@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+	<!-- 引入数据库配置文件 -->
+	<properties resource="database.properties"/>
+
+	<!-- 给实体类取别名-->
+	<!--<typeAliases>
+		指定包名，直接给包下所有的实体类取别名。默认的实体类的别名就是类名(不区分小大写)
+            User实体类：User、user、USER
+		<package name="cn.java.pojo"/>
+	</typeAliases>-->
+
+	<!-- 配置数据库连接环境：driver、url、username、password -->
+	<environments default="mysql">
+		<!-- 开始配置mysql -->
+		<environment id="mysql">
+			<!--配置事务  -->
+			<transactionManager type="JDBC"/>
+			<!-- 配置数据源 -->
+			<dataSource type="POOLED">
+				<property name="driver" value="${driver}"/>
+				<property name="url" value="${url}"/>
+				<property name="username" value="${username}"/>
+				<property name="password" value="${password}"/>
+			</dataSource>
+	   </environment>
+
+
+	</environments>
+	
+	<!-- 关联局部SQL映射配置文件 ，在每一个mapper里，指定SQL映射文件名及全路径-->
+	<mappers>
+<!--		<mapper resource="cn/java/mapper/TakesMapper.xml"/>-->
+		<!-- 把该包下全部.xml文件映射过来-->
+		<package name="mapper"/>
+	</mappers>
+
+	
+</configuration>
