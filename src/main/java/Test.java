@@ -99,7 +99,7 @@ public class Test {
 
 //        RecommendCalculate.generateDictAndTFIDF();
 //        RecommendCalculate.generateTFIDFMatrix();
-//        RecommendCalculate.generateHotRecommend("技术");
+//        RecommendCalculate.generateHotRecommend("科学");
 //        PageResult<Article> pageResult = RecommendAPI.getInstance().hotRecommend("技术",1,10);
 //        System.out.println(pageResult.getList());
 
